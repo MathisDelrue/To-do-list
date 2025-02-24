@@ -50,12 +50,14 @@ def main():
                 print(f"\n{Fore.YELLOW}No tasks found.{Style.RESET_ALL}\n")
             else:
                 print(f"\n{Fore.YELLOW}=== Current Tasks ==={Style.RESET_ALL}\n")
+                # Print header
+                print(f"{Fore.CYAN}{'ID':^4} {'Status':^8} {'Title':<20} {'Due Date':<12} {'Description':<30}{Style.RESET_ALL}")
+                print(f"{Fore.CYAN}{'-'*74}{Style.RESET_ALL}")
+                
                 for i, task in enumerate(tasks, 1):
                     status = f"{Fore.GREEN}✓{Style.RESET_ALL}" if task.completed else f"{Fore.RED}✗{Style.RESET_ALL}"
-                    print(f"{Fore.CYAN}[{status}{Fore.CYAN}] Task #{i}{Style.RESET_ALL}")
-                    print(f"  {Fore.YELLOW}Title:{Style.RESET_ALL} {task.title}")
-                    print(f"  {Fore.YELLOW}Due:{Style.RESET_ALL} {task.due_date}")
-                    print(f"  {Fore.YELLOW}Description:{Style.RESET_ALL} {task.description}\n")
+                    print(f"{i:^4} {status:^8} {task.title:<20} {task.due_date:<12} {task.description:<30}")
+                print()  # Add empty line after the list
         
         elif command in ['complete', '3']:
             try:
