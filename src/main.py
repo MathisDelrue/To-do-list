@@ -37,11 +37,14 @@ def main():
         elif command in ['add', '1']:
             clear_screen()
             print(f"{Fore.YELLOW}=== Add New Task ==={Style.RESET_ALL}\n")
-            title = input(f"{Fore.GREEN}Enter task title:{Style.RESET_ALL} ")
-            description = input(f"{Fore.GREEN}Enter task description:{Style.RESET_ALL} ")
-            due_date = input(f"{Fore.GREEN}Enter due date (YYYY-MM-DD):{Style.RESET_ALL} ")
-            manager.add_task(title, description, due_date)
-            print(f"\n{Fore.GREEN}✓ Task added successfully!{Style.RESET_ALL}\n")
+            try:
+                title = input(f"{Fore.GREEN}Enter task title:{Style.RESET_ALL} ")
+                description = input(f"{Fore.GREEN}Enter task description:{Style.RESET_ALL} ")
+                due_date = input(f"{Fore.GREEN}Enter due date (YYYY-MM-DD):{Style.RESET_ALL} ")
+                manager.add_task(title, description, due_date)
+                print(f"\n{Fore.GREEN}✓ Task added successfully!{Style.RESET_ALL}\n")
+            except ValueError as e:
+                print(f"\n{Fore.RED}✗ Error: {str(e)}{Style.RESET_ALL}\n")
         
         elif command in ['list', '2']:
             clear_screen()
@@ -64,16 +67,16 @@ def main():
                 task_id = int(input(f"\n{Fore.GREEN}Enter task number to mark as complete:{Style.RESET_ALL} ")) - 1
                 manager.complete_task(task_id)
                 print(f"\n{Fore.GREEN}✓ Task marked as complete!{Style.RESET_ALL}\n")
-            except (ValueError, IndexError):
-                print(f"\n{Fore.RED}✗ Invalid task number!{Style.RESET_ALL}\n")
+            except ValueError as e:
+                print(f"\n{Fore.RED}✗ Error: {str(e)}{Style.RESET_ALL}\n")
         
         elif command in ['delete', '4']:
             try:
                 task_id = int(input(f"\n{Fore.RED}Enter task number to delete:{Style.RESET_ALL} ")) - 1
                 manager.delete_task(task_id)
                 print(f"\n{Fore.GREEN}✓ Task deleted successfully!{Style.RESET_ALL}\n")
-            except (ValueError, IndexError):
-                print(f"\n{Fore.RED}✗ Invalid task number!{Style.RESET_ALL}\n")
+            except ValueError as e:
+                print(f"\n{Fore.RED}✗ Error: {str(e)}{Style.RESET_ALL}\n")
         
         elif command in ['quit', '5', 'exit']:
             print(f"\n{Fore.YELLOW}Goodbye!{Style.RESET_ALL}\n")
