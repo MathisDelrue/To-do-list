@@ -1,67 +1,84 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 from task import Task
 from manager import TaskManager
+from colorama import init, Fore, Back, Style
+
+# Initialize colorama for cross-platform colored output
+init()
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_usage():
-    print("\nTo-Do List Application")
-    print("Available commands:")
-    print("  add       - Add a new task")
-    print("  list      - List all tasks")
-    print("  complete  - Mark a task as complete")
-    print("  delete    - Delete a task")
-    print("  quit      - Exit the application\n")
+    clear_screen()
+    print(f"\n{Fore.CYAN}╔══════════════════════════════╗{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}║{Style.BRIGHT}      To-Do List Manager      {Style.RESET_ALL}{Fore.CYAN}║{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}╚══════════════════════════════╝{Style.RESET_ALL}\n")
+    print(f"{Fore.YELLOW}Available Commands:{Style.RESET_ALL}")
+    print(f"  {Fore.GREEN}1.{Style.RESET_ALL} add       - Add a new task")
+    print(f"  {Fore.GREEN}2.{Style.RESET_ALL} list      - List all tasks")
+    print(f"  {Fore.GREEN}3.{Style.RESET_ALL} complete  - Mark a task as complete")
+    print(f"  {Fore.GREEN}4.{Style.RESET_ALL} delete    - Delete a task")
+    print(f"  {Fore.GREEN}5.{Style.RESET_ALL} quit      - Exit the application\n")
 
 def main():
     manager = TaskManager()
+    print_usage()
     
     while True:
-        command = input("Enter command (or 'help' for usage): ").strip().lower()
+        command = input(f"{Fore.CYAN}┌──({Style.BRIGHT}Todo{Style.RESET_ALL}{Fore.CYAN})\n└─$ {Style.RESET_ALL}").strip().lower()
         
-        if command == 'help':
+        if command in ['help', '?']:
             print_usage()
         
-        elif command == 'add':
-            title = input("Enter task title: ")
-            description = input("Enter task description: ")
-            due_date = input("Enter due date (YYYY-MM-DD): ")
+        elif command in ['add', '1']:
+            clear_screen()
+            print(f"{Fore.YELLOW}=== Add New Task ==={Style.RESET_ALL}\n")
+            title = input(f"{Fore.GREEN}Enter task title:{Style.RESET_ALL} ")
+            description = input(f"{Fore.GREEN}Enter task description:{Style.RESET_ALL} ")
+            due_date = input(f"{Fore.GREEN}Enter due date (YYYY-MM-DD):{Style.RESET_ALL} ")
             manager.add_task(title, description, due_date)
-            print("Task added successfully!")
+            print(f"\n{Fore.GREEN}✓ Task added successfully!{Style.RESET_ALL}\n")
         
-        elif command == 'list':
+        elif command in ['list', '2']:
+            clear_screen()
             tasks = manager.get_all_tasks()
             if not tasks:
-                print("No tasks found.")
+                print(f"\n{Fore.YELLOW}No tasks found.{Style.RESET_ALL}\n")
             else:
-                print("\nCurrent Tasks:")
+                print(f"\n{Fore.YELLOW}=== Current Tasks ==={Style.RESET_ALL}\n")
                 for i, task in enumerate(tasks, 1):
-                    status = "✓" if task.completed else " "
-                    print(f"{i}. [{status}] {task.title} (Due: {task.due_date})")
-                    print(f"   Description: {task.description}\n")
+                    status = f"{Fore.GREEN}✓{Style.RESET_ALL}" if task.completed else f"{Fore.RED}✗{Style.RESET_ALL}"
+                    print(f"{Fore.CYAN}[{status}{Fore.CYAN}] Task #{i}{Style.RESET_ALL}")
+                    print(f"  {Fore.YELLOW}Title:{Style.RESET_ALL} {task.title}")
+                    print(f"  {Fore.YELLOW}Due:{Style.RESET_ALL} {task.due_date}")
+                    print(f"  {Fore.YELLOW}Description:{Style.RESET_ALL} {task.description}\n")
         
-        elif command == 'complete':
+        elif command in ['complete', '3']:
             try:
-                task_id = int(input("Enter task number to mark as complete: ")) - 1
+                task_id = int(input(f"\n{Fore.GREEN}Enter task number to mark as complete:{Style.RESET_ALL} ")) - 1
                 manager.complete_task(task_id)
-                print("Task marked as complete!")
+                print(f"\n{Fore.GREEN}✓ Task marked as complete!{Style.RESET_ALL}\n")
             except (ValueError, IndexError):
-                print("Invalid task number!")
+                print(f"\n{Fore.RED}✗ Invalid task number!{Style.RESET_ALL}\n")
         
-        elif command == 'delete':
+        elif command in ['delete', '4']:
             try:
-                task_id = int(input("Enter task number to delete: ")) - 1
+                task_id = int(input(f"\n{Fore.RED}Enter task number to delete:{Style.RESET_ALL} ")) - 1
                 manager.delete_task(task_id)
-                print("Task deleted successfully!")
+                print(f"\n{Fore.GREEN}✓ Task deleted successfully!{Style.RESET_ALL}\n")
             except (ValueError, IndexError):
-                print("Invalid task number!")
+                print(f"\n{Fore.RED}✗ Invalid task number!{Style.RESET_ALL}\n")
         
-        elif command == 'quit':
-            print("Goodbye!")
+        elif command in ['quit', '5', 'exit']:
+            print(f"\n{Fore.YELLOW}Goodbye!{Style.RESET_ALL}\n")
             sys.exit(0)
         
         else:
-            print("Unknown command. Type 'help' for usage.")
+            print(f"\n{Fore.RED}✗ Unknown command. Type 'help' or '?' for usage.{Style.RESET_ALL}\n")
 
 if __name__ == '__main__':
     main()
